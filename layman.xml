@@ -1,0 +1,12 @@
+<?xml version="1.0" ?> 
+<repositories version="1.0">
+    <repo priority="50" quality="experimental" status="unofficial">
+        <name>armills</name>
+        <description>My personal gentoo overlay</description>
+        <homepage>http://github.com/armills/overlay/</homepage>
+        <owner>
+            <email>adam@armills.info</email>
+        </owner>
+        <source type="git">git://github.com/armills/overlay.git</source>
+    </repo>
+</repositories>
