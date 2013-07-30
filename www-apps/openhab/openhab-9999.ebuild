@@ -22,9 +22,10 @@ RDEPEND=">=virtual/jre-1.6"
 
 src_compile() {
 	MVN_LOCAL_REPO="${T}/maven-local-repo"
-	mkdir "${MVN_LOCAL_REPO}" || die "Unable to create maven repo directory"
+	mkdir -p "${MVN_LOCAL_REPO}" || die "Unable to create maven repo directory"
 
-	mvn-3.0 -Dmaven.repo.local="${MVN_LOCAL_REPO}" clean install
+	mvn-3.0 -Dmaven.repo.local="${MVN_LOCAL_REPO}" clean install || \
+	        die "Maven failed to complete build process. See log for details"
 }
 
 src_install() {
