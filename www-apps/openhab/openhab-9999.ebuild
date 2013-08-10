@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit mercurial java-pkg-2
+inherit mercurial java-pkg-2 user
 
 DESCRIPTION="A universal integration platform for home automation"
 HOMEPAGE="http://code.google.com/p/openhab/"
@@ -24,6 +24,9 @@ pkg_setup() {
 	java-pkg-2_pkg_setup
 
 	addpredict "/dev/random"
+
+	enewgroup openhab
+	enewuser openhab -1 -1 -1 "openhab"
 }
 
 src_compile() {
@@ -44,6 +47,7 @@ src_install() {
 		insinto /opt/openhab-runtime
 		doins -r distribution/target/runtime/*
 		fperms +x /opt/openhab-runtime/start.sh
+		fowners -R openhab:openhab /opt/openhab-runtime
 	fi
 
 	if use designer ; then
