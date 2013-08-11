@@ -48,6 +48,9 @@ src_install() {
 		doins -r distribution/target/runtime/*
 		fperms +x /opt/openhab-runtime/start.sh
 		fowners -R openhab:openhab /opt/openhab-runtime
+
+		newinitd "${FILESDIR}"/openhab-runtime.init openhab-runtime
+		newconfd "${FILESDIR}"/openhab-runtime.conf openhab-runtime
 	fi
 
 	if use designer ; then
