@@ -14,7 +14,7 @@ MY_SP="${MY_SPN}-${PV}"
 
 DESCRIPTION="A cross-platform Enterprise Messaging system which implements the Advanced Message Queuing Protocol"
 HOMEPAGE="http://qpid.apache.org"
-SRC_URI="mirror://apache/${MY_SPN}/${PV}/${P}.tar.gz"
+SRC_URI="http://archive.apache.org/dist/${MY_SPN}/${PV}/${P}.tar.gz"
 
 LICENSE="Apache-2.0"
 SLOT="0"
@@ -54,6 +54,8 @@ pkg_setup() {
 
 src_prepare() {
 	epatch "${FILESDIR}"/swig-perl-bad-destdir.patch
+
+	python_convert_shebangs -r 2 .
 }
 
 # for reference

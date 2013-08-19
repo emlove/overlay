@@ -6,12 +6,11 @@ EAPI=4
 PYTHON_DEPEND="2"
 PYTHON_MODNAME="qpid mllib"
 
-inherit distutils
+inherit distutils python
 
 DESCRIPTION="Python qpid bindings"
 HOMEPAGE="http://qpid.apache.org/"
-# http://www.apache.org/dyn/closer.cgi/qpid/0.16/qpid-python-0.16.tar.gz
-SRC_URI="mirror://apache/qpid/${PV}/${P}.tar.gz"
+SRC_URI="http://archive.apache.org/dist/qpid/${PV}/${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -27,3 +26,12 @@ DEPEND="dev-libs/gobject-introspection
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/qpid-${PV}/python/"
+
+pkg_setup() {
+	python_set_active_version 2
+	python_pkg_setup
+}
+
+src_prepare() {
+	python_convert_shebangs -r 2 .
+}
