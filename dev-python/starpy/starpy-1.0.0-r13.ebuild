@@ -20,6 +20,6 @@ SLOT="0"
 KEYWORDS="amd64 ppc ~x86 ~x86-fbsd"
 IUSE=""
 
-DEPEND=">=dev-python/twisted-10.1"
+DEPEND=">=dev-python/twisted-core-10.1"
 RDEPEND="${DEPEND}"
 
