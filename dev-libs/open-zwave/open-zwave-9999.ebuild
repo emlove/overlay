@@ -25,14 +25,27 @@ src_compile() {
 src_install() {
 	dodir /etc/openzwave
 	dodir /usr/include/openzwave
+	dodir /usr/include/openzwave/command_classes
+	dodir /usr/include/openzwave/value_classes
+	dodir /usr/include/openzwave/platform
+	dodir /usr/include/openzwave/platform/unix
 	dodir /usr/share/openzwave
 	dodir /usr/lib
+
 	insinto /usr/share/openzwave
 	doins -r config
 	exeinto /usr/lib
 	dolib.so cpp/lib/linux/libopenzwave.so
 	dolib.a cpp/lib/linux/libopenzwave.a
+
 	insinto /usr/include/openzwave
-	doins cpp/src/*.h cpp/src/value_classes/*.h cpp/src/command_classes/*.h cpp/src/platform/*.h cpp/src/platform/unix/*.h
-#	dodoc README* AUTHORS TODO* COPYING
+	doins cpp/src/*.h
+	insinto /usr/include/openzwave/command_classes
+	doins cpp/src/command_classes/*.h
+	insinto /usr/include/openzwave/value_classes
+	doins cpp/src/value_classes/*.h
+	insinto /usr/include/openzwave/platform
+	doins cpp/src/platform/*.h
+	insinto /usr/include/openzwave/platform/unix
+	doins cpp/src/platform/unix/*.h
 }
