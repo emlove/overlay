@@ -54,11 +54,11 @@ src_prepare() {
 	use irtrans		&& DEVICES+=" irtrans_ethernet"
 	use jointspace	&& DEVICES+=" agojointspace"
 	# TODO: package libeibclient
-	# use knx		&& DEVICES+=" agoknx"
+	use knx		&& DEVICES+=" agoknx"
 	use kwikwai		&& DEVICES+=" kwikwai"
 	use mediaproxy	&& DEVICES+=" mediaproxy"
 	# TODO: package python-ow
-	# use one-wire	&& DEVICES+=" 1wire"
+	use one-wire	&& DEVICES+=" 1wire"
 	use onkyo		&& DEVICES+=" onkyo"
 	use rain8net	&& DEVICES+=" rain8net"
 	use zwave		&& DEVICES+=" zwave"
