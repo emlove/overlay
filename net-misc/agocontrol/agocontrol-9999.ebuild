@@ -15,15 +15,22 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE="apc asterisk blinkm chromoflex dmx enigma2 firmata gc100 i2c irtrans
-	jointspace knx kwikwai mcp3xxx mediaproxy meloware one-wire onkyo onvif
-	rain8net raspberry-pi zwave"
+	jointspace kwikwai mcp3xxx mediaproxy meloware one-wire onkyo onvif
+	rain8net raspberry-pi"
 
 DEPEND="dev-cpp/yaml-cpp
 		dev-libs/jsoncpp
 		dev-python/pyyaml
 		dev-python/qpid-python
 		dev-python/sqlite3dbm
-		net-misc/qpid-cpp"
+		net-misc/qpid-cpp
+		apc? ( >=dev-python/pysnmp-4.0 )
+		asterisk? ( dev-python/twisted-core dev-python/starpy )
+		blinkm? ( sys-apps/i2c-tools )
+		enigma2? ( net-dns/avahi[python] dev-python/pygobject
+			dev-python/dbus-python )
+		i2c? ( sys-apps/i2c-tools )
+		onvif? ( sys-apps/util-linux dev-libs/openssl:0 )"
 RDEPEND="${DEPEND}"
 
 pkg_setp() {
@@ -34,11 +41,12 @@ pkg_setp() {
 src_prepare() {
 	python_convert_shebangs -r 2 .
 
-	if ! use one-wire ; then
+	# TODO: package python-ow
+	# if ! use one-wire ; then
 		sed -i '\#install devices/agoowfs#d' Makefile
 		sed -i '\#install -d $(DESTDIR)/etc/opt/agocontrol/owfs#d' Makefile
 		rm conf/agoowfs.service
-	fi
+	# fi
 	if ! use enigma2 ; then
 		sed -i '\#install devices/enigma2#d' Makefile
 		rm conf/agoenigma2.service
@@ -51,17 +59,19 @@ src_prepare() {
 		sed -i '\#install devices/onkyo#d' Makefile
 		rm conf/agoiscp.service
 	fi
-	if ! use zwave ; then
+	# TODO: package open-zwave
+	# if ! use zwave ; then
 		sed -i '\#install devices/zwave#d' Makefile
 		sed -i '\#install scripts/convert-zwave-uuid#d' Makefile
 		sed -i '\#install -d $(DESTDIR)/etc/opt/agocontrol/uuidmap#d' Makefile
 		sed -i '\#install -d $(DESTDIR)/etc/opt/agocontrol/ozw#d' Makefile
 		rm conf/agozwave.service
-	fi
-	if ! use knx ; then
+	# fi
+	# TODO: package libeibclient
+	# if ! use knx ; then
 		sed -i '\#install devices/agoknx#d' Makefile
 		rm conf/agoknx.service
-	fi
+	# fi
 	if ! use firmata ; then
 		sed -i '\#install devices/firmata#d' Makefile
 		rm conf/agofirmata.service
@@ -138,9 +148,9 @@ src_prepare() {
 src_compile() {
 	MAKE_TARGETS="manager messagesend resolver agotimer agorpc"
 	
-	use zwave && MAKE_TARGETS="${MAKE_TARGETS} zwave"
+	# use zwave && MAKE_TARGETS="${MAKE_TARGETS} zwave"
 	use chromoflex && MAKE_TARGETS="${MAKE_TARGETS} agochromoflex"
-	use knx && MAKE_TARGETS="${MAKE_TARGETS} agoknx"
+	# use knx && MAKE_TARGETS="${MAKE_TARGETS} agoknx"
 	use rain8net && MAKE_TARGETS="${MAKE_TARGETS} rain8net"
 	use kwikwai && MAKE_TARGETS="${MAKE_TARGETS} kwikwai"
 	use irtrans && MAKE_TARGETS="${MAKE_TARGETS} irtransethernet"
