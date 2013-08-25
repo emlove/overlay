@@ -9,6 +9,7 @@
 		<flag name="chromoflex">chromoflex interface driver</flag>
 		<flag name="dmx">DMX interface driver</flag>
 		<flag name="enigma2">Enigma2/Dreambox interface</flag>
+		<flag name="enocean">EnOcean device interface</flag>
 		<flag name="firmata">Arduino Firmata interface driver</flag>
 		<flag name="gc100">gc100 interface</flag>
 		<flag name="i2c">i2c interface driver</flag>
