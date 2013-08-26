@@ -33,9 +33,19 @@ DEPEND="dev-cpp/yaml-cpp
 		zwave? ( virtual/udev dev-libs/open-zwave )"
 RDEPEND="${DEPEND}"
 
-pkg_setp() {
+pkg_setup() {
 	python_set_active_version 2
 	python_pkg_setup
+
+	if use blinkm || use i2c ; then
+		ewarn "The blinkm and i2c devices require the i2c-dev.h header"
+		ewarn "installed by the i2c-tools package. Gentoo does not"
+		ewarn "install this header because it conflicts with the"
+		ewarn "version installed by sys-kernel/linux-headers. Building"
+		ewarn "these devices on gentoo will require the i2c-tools-4.0"
+		ewarn "package as described by upstream on the following page"
+		ewarn "http://www.lm-sensors.org/wiki/I2CTools_4_Plan"
+	fi
 }
 
 src_prepare() {
