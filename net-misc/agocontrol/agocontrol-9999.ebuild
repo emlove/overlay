@@ -147,4 +147,7 @@ src_install() {
 	# use  newinitd "${FILESDIR}"/agosqueezeboxserver.init agosqueezeboxserver
 	newinitd "${FILESDIR}"/agotimer.init agotimer
 	use zwave && newinitd "${FILESDIR}"/agozwave.init agozwave
+
+	fowners -R agocontrol:agocontrol /etc/opt/agocontrol
+	fperms -R -x /etc/opt/agocontrol
 }
