@@ -4,5 +4,6 @@
 # $Header: $
 
 command="/opt/agocontrol/bin/agofirmata"
+command_background="yes"
 pidfile="/var/run/${SVCNAME}.pid"
-start_stop_daemon_args="--background --make-pidfile --chdir $(dirname ${command})"
+start_stop_daemon_args="--user agocontrol:agocontrol --chdir $(dirname ${command})"
