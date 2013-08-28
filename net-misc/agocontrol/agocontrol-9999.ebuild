@@ -148,6 +148,9 @@ src_install() {
 	newinitd "${FILESDIR}"/agotimer.init agotimer
 	use zwave && newinitd "${FILESDIR}"/agozwave.init agozwave
 
+	insinto /opt/agocontrol/
+	doins -r core/rpc/html
+
 	fowners -R agocontrol:agocontrol /etc/opt/agocontrol
 	fperms -R -x /etc/opt/agocontrol
 }
