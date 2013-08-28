@@ -5,4 +5,4 @@
 
 command="/opt/agocontrol/bin/agoasterisk.py"
 pidfile="/var/run/${SVCNAME}.pid"
-start_stop_daemon_args="--chdir $(dirname ${command})"
+start_stop_daemon_args="--background --make-pidfile --chdir $(dirname ${command})"
