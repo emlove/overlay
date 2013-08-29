@@ -58,57 +58,57 @@ src_prepare() {
 	python_convert_shebangs -r 2 .
 
 	DEVICES="syslog"
-	use apc 		&& DEVICES+=" agoapc"
-	use asterisk 	&& DEVICES+=" asterisk"
-	use blinkm 		&& DEVICES+=" blinkm"
-	use chromoflex 	&& DEVICES+=" chromoflex"
-	use dmx			&& DEVICES+=" agodmx"
-	use enigma2		&& DEVICES+=" enigma2"
-	use enocean		&& DEVICES+=" agoEnOcean"
-	use firmata		&& DEVICES+=" firmata"
-	use gc100		&& DEVICEs+=" gc100"
-	use i2c			&& DEVICES+=" i2c"
-	use irtrans		&& DEVICES+=" irtrans_ethernet"
-	use jointspace	&& DEVICES+=" agojointspace"
+	use apc && DEVICES+=" agoapc"
+	use asterisk && DEVICES+=" asterisk"
+	use blinkm && DEVICES+=" blinkm"
+	use chromoflex && DEVICES+=" chromoflex"
+	use dmx && DEVICES+=" agodmx"
+	use enigma2 && DEVICES+=" enigma2"
+	use enocean && DEVICES+=" agoEnOcean"
+	use firmata && DEVICES+=" firmata"
+	use gc100 && DEVICEs+=" gc100"
+	use i2c && DEVICES+=" i2c"
+	use irtrans && DEVICES+=" irtrans_ethernet"
+	use jointspace && DEVICES+=" agojointspace"
 	# TODO: package libeibclient
-	use knx		&& DEVICES+=" agoknx"
-	use kwikwai		&& DEVICES+=" kwikwai"
-	use mediaproxy	&& DEVICES+=" mediaproxy"
+	use knx && DEVICES+=" agoknx"
+	use kwikwai && DEVICES+=" kwikwai"
+	use mediaproxy && DEVICES+=" mediaproxy"
 	# TODO: package python-ow
-	use one-wire	&& DEVICES+=" 1wire"
-	use onkyo		&& DEVICES+=" onkyo"
-	use rain8net	&& DEVICES+=" rain8net"
-	use zwave		&& DEVICES+=" zwave"
+	use one-wire && DEVICES+=" 1wire"
+	use onkyo && DEVICES+=" onkyo"
+	use rain8net && DEVICES+=" rain8net"
+	use zwave && DEVICES+=" zwave"
 	if use raspberry-pi ; then
 		DEVICES+=" raspiGPIO"
-		use mcp3xxx 	&& DEVICES+=" raspiMCP3xxxGPIO"
-		use one-wire 	&& DEVICES+=" raspi1wGPIO"
+		use mcp3xxx && DEVICES+=" raspiMCP3xxxGPIO"
+		use one-wire && DEVICES+=" raspi1wGPIO"
 	fi
 
 	sed -i "s/^DIRS = .*/DIRS = ${DEVICES}/" devices/Makefile
 
-	use apc			|| rm conf/agoapc.service
-	use asterisk 	|| rm conf/agoasterisk.service
-	use blinkm		|| rm conf/agoblinkm.service
-	use cherrypy	|| rm conf/agoadmin.service
-	use dmx			|| rm conf/agodmx.service
-	use enigma2 	|| rm conf/agoenigma2.service
-	use firmata 	|| rm conf/agofirmata.service
+	use apc || rm conf/agoapc.service
+	use asterisk || rm conf/agoasterisk.service
+	use blinkm || rm conf/agoblinkm.service
+	use cherrypy || rm conf/agoadmin.service
+	use dmx || rm conf/agodmx.service
+	use enigma2 || rm conf/agoenigma2.service
+	use firmata || rm conf/agofirmata.service
 	use gc100 || rm conf/agogc100.service
-	use i2c			|| rm conf/agoi2c.service
-	use irtrans		|| rm conf/agoirtransethernet.service
-	use jointspace	|| rm conf/agojointspace.service
-	use jsonrpc		|| rm conf/agorpc.service
+	use i2c || rm conf/agoi2c.service
+	use irtrans || rm conf/agoirtransethernet.service
+	use jointspace || rm conf/agojointspace.service
+	use jsonrpc || rm conf/agorpc.service
 	rm conf/agoknx.service
-	use kwikwai		|| rm conf/agokwikwai.service
+	use kwikwai || rm conf/agokwikwai.service
 	rm conf/agoowfs.service
-	use onkyo 		|| rm conf/agoiscp.service
-	use rain8net	|| rm conf/agorain8net.service
-	use zwave 		|| sed -i '\#install scripts/convert-zwave-uuid#d' Makefile
-	use zwave 		|| rm conf/agozwave.service
-	use raspberry-pi|| rm conf/raspiGPIO.service
-	( use raspberry-pi && use one-wire )	|| rm conf/raspi1wGPIO.service
-	( use raspberry-pi && use mcp3xxx )		|| rm conf/raspiMCP3xxxGPIO.service
+	use onkyo || rm conf/agoiscp.service
+	use rain8net || rm conf/agorain8net.service
+	use zwave || sed -i '\#install scripts/convert-zwave-uuid#d' Makefile
+	use zwave || rm conf/agozwave.service
+	use raspberry-pi || rm conf/raspiGPIO.service
+	( use raspberry-pi && use one-wire ) || rm conf/raspi1wGPIO.service
+	( use raspberry-pi && use mcp3xxx ) || rm conf/raspiMCP3xxxGPIO.service
 
 	# These devices aren't installed in upstream makefile. 
 	# Ensure we don't install the service files.
