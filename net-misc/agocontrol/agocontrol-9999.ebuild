@@ -172,6 +172,7 @@ pkg_postinst() {
 		UUID=$(uuidgen)
 		sed "s/<uuid>/${UUID}/" /etc/opt/agocontrol/config.ini.tpl > \
 			/etc/opt/agocontrol/config.ini
+		chown agocontrol:agocontrol /etc/opt/agocontrol/config.ini
 	)
 
 	test -e /etc/opt/agocontrol/inventory.db || (
