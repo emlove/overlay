@@ -23,7 +23,7 @@ DEPEND="<dev-cpp/yaml-cpp-0.5.0
 		dev-python/pyyaml
 		dev-python/qpid-python
 		dev-python/sqlite3dbm
-		net-misc/qpid-cpp
+		net-misc/qpid-cpp[sasl]
 		apc? ( >=dev-python/pysnmp-4.0 )
 		asterisk? ( dev-python/twisted-core dev-python/starpy )
 		blinkm? ( sys-apps/i2c-tools )
