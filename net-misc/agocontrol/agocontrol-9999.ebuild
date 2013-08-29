@@ -184,8 +184,10 @@ pkg_postinst() {
 			saslpasswd2 -c -p -f /etc/qpid/qpidd.sasldb -u QPID agocontrol
 	)
 
-	grep -q agocontrol /etc/qpid/qpidd.acl || sed -i \
-		's/admin@QPID/admin@QPID agocontrol@QPID/g' /etc/qpid/qpidd.acl
+	test -e /etc/qpid/qpid.acl && (
+		grep -q agocontrol /etc/qpid/qpidd.acl || sed -i \
+			's/admin@QPID/admin@QPID agocontrol@QPID/g' /etc/qpid/qpidd.acl
+	)
 
 	test -e /var/opt/agocontrol/datalogger.db || (
 		sqlite3 -init /etc/opt/agocontrol/datalogger.sql \
