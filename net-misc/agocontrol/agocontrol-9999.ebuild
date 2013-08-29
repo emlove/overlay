@@ -86,6 +86,7 @@ src_prepare() {
 	fi
 
 	sed -i "s/^DIRS = .*/DIRS = ${DEVICES}/" devices/Makefile
+	use jsonrpc || sed -i '/DIRS = /{s/rpc//}' core/Makefile
 
 	use apc || rm conf/agoapc.service
 	use asterisk || rm conf/agoasterisk.service
