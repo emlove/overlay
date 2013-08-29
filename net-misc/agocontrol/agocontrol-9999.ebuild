@@ -14,9 +14,9 @@ ESVN_REPO_URI="http://svn.agocontrol.com/svn/agocontrol"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="apc asterisk blinkm chromoflex dmx enigma2 enocean firmata gc100 i2c
-	irtrans jointspace knx kwikwai mcp3xxx mediaproxy one-wire onkyo rain8net
-	raspberry-pi zwave"
+IUSE="apc asterisk blinkm +cherrypy chromoflex dmx enigma2 enocean firmata
+	gc100 i2c irtrans jointspace jsonrpc knx kwikwai mcp3xxx mediaproxy
+	one-wire onkyo rain8net raspberry-pi zwave"
 
 DEPEND="<dev-cpp/yaml-cpp-0.5.0
 		dev-libs/jsoncpp
@@ -27,6 +27,9 @@ DEPEND="<dev-cpp/yaml-cpp-0.5.0
 		apc? ( >=dev-python/pysnmp-4.0 )
 		asterisk? ( dev-python/twisted-core dev-python/starpy )
 		blinkm? ( sys-apps/i2c-tools )
+		cherrypy? ( =dev-python/cherrypy-3* dev-python/mako
+			dev-python/simplejson net-dns/avahi[python] dev-python/dbus-python
+			dev-python/pygobject )
 		enigma2? ( net-dns/avahi[python] dev-python/pygobject
 			dev-python/dbus-python )
 		i2c? ( sys-apps/i2c-tools )
@@ -87,6 +90,7 @@ src_prepare() {
 	use apc			|| rm conf/agoapc.service
 	use asterisk 	|| rm conf/agoasterisk.service
 	use blinkm		|| rm conf/agoblinkm.service
+	use cherrypy	|| rm conf/agoadmin.service
 	use dmx			|| rm conf/agodmx.service
 	use enigma2 	|| rm conf/agoenigma2.service
 	use firmata 	|| rm conf/agofirmata.service
@@ -94,6 +98,7 @@ src_prepare() {
 	use i2c			|| rm conf/agoi2c.service
 	use irtrans		|| rm conf/agoirtransethernet.service
 	use jointspace	|| rm conf/agojointspace.service
+	use jsonrpc		|| rm conf/agorpc.service
 	rm conf/agoknx.service
 	use kwikwai		|| rm conf/agokwikwai.service
 	rm conf/agoowfs.service
@@ -114,10 +119,10 @@ src_prepare() {
 src_install() {
 	emake DESTDIR="${D}" install
 
-	newinitd "${FILESDIR}"/agoadmin.init agoadmin
 	use apc && newinitd "${FILESDIR}"/agoapc.init agoapc
 	use asterisk && newinitd "${FILESDIR}"/agoasterisk.init agoasterisk
 	use blinkm && newinitd "${FILESDIR}"/agoblinkm.init agoblinkm
+	use cherrypy && newinitd "${FILESDIR}"/agoadmin.init agoadmin
 	use dmx && newinitd "${FILESDIR}"/agodmx.init agodmx
 	newinitd "${FILESDIR}"/agodatalogger.init agodatalogger
 	use enigma2 && newinitd "${FILESDIR}"/agoenigma2.init agoenigma2
@@ -129,6 +134,7 @@ src_install() {
 		newinitd "${FILESDIR}"/agoirtransethernet.init agoirtransethernet
 	use onkyo && newinitd "${FILESDIR}"/agoiscp.init agoiscp
 	use jointspace && newinitd "${FILESDIR}"/agojointspace.init agojointspace
+	use jsonrpc && newinitd "${FILESDIR}"/agorpc.init agorpc
 	use knx && newinitd "${FILESDIR}"/agoknx.init agoknx
 	use kwikwai && newinitd "${FILESDIR}"/agokwikwai.init agokwikwai
 	newinitd "${FILESDIR}"/agomeloware.init agomeloware
@@ -141,7 +147,6 @@ src_install() {
 	use raspberry-pi && use mcp3xxx && \
 		newinitd "${FILESDIR}"/agoraspiMCP3xxxGPIO.init agoraspiMCP3xxxGPIO
 	newinitd "${FILESDIR}"/agoresolver.init agoresolver
-	newinitd "${FILESDIR}"/agorpc.init agorpc
 	newinitd "${FILESDIR}"/agoscenario.init agoscenario
 	newinitd "${FILESDIR}"/agosimulator.init agosimulator
 	# use  newinitd "${FILESDIR}"/agosqueezeboxserver.init agosqueezeboxserver
@@ -149,9 +154,8 @@ src_install() {
 	use zwave && newinitd "${FILESDIR}"/agozwave.init agozwave
 
 	insinto /opt/agocontrol/
-	doins -r admin
-	fperms +x /opt/agocontrol/admin/agoadmin.py
-	doins -r core/rpc/html
+	use cherrypy && doins -r admin
+	use jsonrpc && doins -r core/rpc/html
 
 	fowners -R agocontrol:agocontrol /etc/opt/agocontrol
 	fperms -R -x /etc/opt/agocontrol

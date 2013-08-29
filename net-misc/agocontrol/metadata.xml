@@ -7,6 +7,7 @@
 		<flag name="asterisk">Asterisk PBX interface</flag>
 		<flag name="blinkm">blinkm interface driver</flag>
 		<flag name="chromoflex">chromoflex interface driver</flag>
+		<flag name="cherrypy">Web administration interface</flag>
 		<flag name="dmx">DMX interface driver</flag>
 		<flag name="enigma2">Enigma2/Dreambox interface</flag>
 		<flag name="enocean">EnOcean device interface</flag>
@@ -15,6 +16,7 @@
 		<flag name="i2c">i2c interface driver</flag>
 		<flag name="irtrans">IRTrans Ethernet interface driver</flag>
 		<flag name="jointspace">JointSpace interface</flag>
+		<flag name="jsonrpc">New unstable javascript rpc web interface</flag>
 		<flag name="knx">KNX interface driver</flag>
 		<flag name="kwikwai">Kwikwai HDMI CEC bridge interface driver</flag>
 		<flag name="mcp3xxx">Raspberry pi MCP3xxx ADC GPIO driver</flag>
