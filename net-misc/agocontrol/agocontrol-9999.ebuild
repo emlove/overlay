@@ -149,6 +149,8 @@ src_install() {
 	use zwave && newinitd "${FILESDIR}"/agozwave.init agozwave
 
 	insinto /opt/agocontrol/
+	doins -r admin
+	fperms +x /opt/agocontrol/admin/agoadmin.py
 	doins -r core/rpc/html
 
 	fowners -R agocontrol:agocontrol /etc/opt/agocontrol
