@@ -55,6 +55,8 @@ pkg_setup() {
 }
 
 src_prepare() {
+	epatch "${FILESDIR}/${P}-use-openzwave-share.patch"
+
 	python_convert_shebangs -r 2 .
 
 	DEVICES="syslog"
