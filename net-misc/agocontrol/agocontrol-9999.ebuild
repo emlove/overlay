@@ -41,7 +41,7 @@ pkg_setup() {
 	python_pkg_setup
 
 	enewgroup agocontrol
-	enewuser agocontrol -1 -1 -1 "agocontrol"
+	enewuser agocontrol -1 -1 "/var/run/agocontrol" "agocontrol"
 
 	if use blinkm || use i2c ; then
 		ewarn "The blinkm and i2c devices require the i2c-dev.h header"
@@ -160,5 +160,34 @@ src_install() {
 	use jsonrpc && doins -r core/rpc/html
 
 	fowners -R agocontrol:agocontrol /etc/opt/agocontrol
+	fowners -R agocontrol:agocontrol /var/opt/agocontrol
 	fperms -R -x /etc/opt/agocontrol
+}
+
+pkg_postinst() {
+	PASSWD=letmein
+
+	test -e /etc/opt/agocontrol/config.ini || (
+		UUID=$(uuidgen)
+		sed "s/<uuid>/${UUID}/" /etc/opt/agocontrol/config.ini.tpl > \
+			/etc/opt/agocontrol/config.ini
+	)
+
+	test -e /etc/opt/agocontrol/inventory.db || (
+		sqlite3 -init /etc/opt/agocontrol/inventory.sql \
+			/etc/opt/agocontrol/inventory.db .quit | tee
+	)
+
+	sasldblistusers2 -f /etc/qpid/qpidd.sasldb  | grep -q agocontrol || (
+		echo $PASSWD | \
+			saslpasswd2 -c -p -f /etc/qpid/qpidd.sasldb -u QPID agocontrol
+	)
+
+	grep -q agocontrol /etc/qpid/qpidd.acl || sed -i \
+		's/admin@QPID/admin@QPID agocontrol@QPID/g' /etc/qpid/qpidd.acl
+
+	test -e /var/opt/agocontrol/datalogger.db || (
+		sqlite3 -init /etc/opt/agocontrol/datalogger.sql \
+			/var/opt/agocontrol/datalogger.db .quit | tee
+	)
 }
