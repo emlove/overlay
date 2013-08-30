@@ -117,6 +117,10 @@ src_prepare() {
 	# Ensure we don't install the service files.
 	rm conf/agoradiothermostat.service
 	rm conf/agosqueezeboxserver.service
+
+	sed -i '\#install conf/config.ini.tpl#d' Makefile
+	sed -i '\#install data/inventory.sql#d' Makefile
+	sed -i '\#install data/datalogger.sql#d' Makefile
 }
 
 src_install() {
@@ -165,6 +169,12 @@ src_install() {
 	fowners -R agocontrol:agocontrol /etc/opt/agocontrol
 	fowners -R agocontrol:agocontrol /var/opt/agocontrol
 	fperms -R -x /etc/opt/agocontrol
+
+	insinto /usr/share/${PN}/conf
+	doins conf/config.ini.tpl
+	insinto /usr/share/${PN}/data
+	doins data/inventory.sql
+	doins data/datalogger.sql
 }
 
 pkg_postinst() {
@@ -177,14 +187,14 @@ pkg_config() {
 
 	test -e "${ROOT}"/etc/opt/agocontrol/config.ini || (
 		UUID=$(uuidgen)
-		sed "s/<uuid>/${UUID}/" "${ROOT}"/etc/opt/agocontrol/config.ini.tpl > \
-			"${ROOT}"/etc/opt/agocontrol/config.ini
+		sed "s/<uuid>/${UUID}/" "${ROOT}"/usr/share/${PN}/conf/config.ini.tpl \
+			> "${ROOT}"/etc/opt/agocontrol/config.ini
 		chown agocontrol:agocontrol "${ROOT}"/etc/opt/agocontrol/config.ini
 	)
 
 	test -e "${ROOT}"/etc/opt/agocontrol/inventory.db || (
-		sqlite3 -init "${ROOT}"/etc/opt/agocontrol/inventory.sql \
-			"${ROOT}"/etc/opt/agocontrol/inventory.db .quit | tee
+		sqlite3 -init "${ROOT}"/usr/share/${PN}/data/inventory.sql \
+			"${ROOT}"/etc/opt/agocontrol/inventory.db .quit
 	)
 
 	sasldblistusers2 -f "${ROOT}"/etc/qpid/qpidd.sasldb | \
@@ -201,7 +211,7 @@ pkg_config() {
 	)
 
 	test -e "${ROOT}"/var/opt/agocontrol/datalogger.db || (
-		sqlite3 -init "${ROOT}"/etc/opt/agocontrol/datalogger.sql \
-			"${ROOT}"/var/opt/agocontrol/datalogger.db .quit | tee
+		sqlite3 -init "${ROOT}"/usr/share/${PN}/data/datalogger.sql \
+			"${ROOT}"/var/opt/agocontrol/datalogger.db .quit
 	)
 }
