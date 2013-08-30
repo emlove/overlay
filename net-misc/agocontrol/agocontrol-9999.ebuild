@@ -174,12 +174,13 @@ src_install() {
 	doins conf/config.ini.tpl
 	insinto /usr/share/${PN}/data
 	doins data/inventory.sql
+	doins data/inventory-upgrade.sql
 	doins data/datalogger.sql
 }
 
 pkg_postinst() {
 	ewarn "Before you can use ${PN}, you must setup the initial configuration."
-	ewarn "You can do this by running 'emerge --config ${PN}"
+	ewarn "You can load default configurations by running 'emerge --config ${PN}'"
 }
 
 pkg_config() {
@@ -188,30 +189,39 @@ pkg_config() {
 	test -e "${ROOT}"/etc/opt/agocontrol/config.ini || (
 		UUID=$(uuidgen)
 		sed "s/<uuid>/${UUID}/" "${ROOT}"/usr/share/${PN}/conf/config.ini.tpl \
-			> "${ROOT}"/etc/opt/agocontrol/config.ini
-		chown agocontrol:agocontrol "${ROOT}"/etc/opt/agocontrol/config.ini
+			> "${ROOT}"/etc/opt/agocontrol/config.ini && \
+		chown agocontrol:agocontrol "${ROOT}"/etc/opt/agocontrol/config.ini && \
+		einfo "Installed /etc/opt/agocontrol/config.ini"
 	)
 
 	test -e "${ROOT}"/etc/opt/agocontrol/inventory.db || (
 		sqlite3 -init "${ROOT}"/usr/share/${PN}/data/inventory.sql \
-			"${ROOT}"/etc/opt/agocontrol/inventory.db .quit
+			"${ROOT}"/etc/opt/agocontrol/inventory.db .quit && \
+		sqlite3 -init "${ROOT}"/usr/share/${PN}/data/inventory-upgrade.sql \
+			"${ROOT}"/etc/opt/agocontrol/inventory.db .quit && \
+		chown agocontrol:agocontrol "${ROOT}"/etc/opt/agocontrol/inventory.db && \
+		einfo "Installed /etc/opt/agocontrol/inventory.db"
+	)
+
+	test -e "${ROOT}"/var/opt/agocontrol/datalogger.db || (
+		sqlite3 -init "${ROOT}"/usr/share/${PN}/data/datalogger.sql \
+			"${ROOT}"/var/opt/agocontrol/datalogger.db .quit && \
+		chown agocontrol:agocontrol "${ROOT}"/var/opt/agocontrol/datalogger.db && \
+		einfo "Installed /var/opt/agocontroll/datalogger.db"
 	)
 
 	sasldblistusers2 -f "${ROOT}"/etc/qpid/qpidd.sasldb | \
 	grep -q agocontrol || (
 		echo $PASSWD | \
 			saslpasswd2 -c -p -f "${ROOT}"/etc/qpid/qpidd.sasldb \
-			-u QPID agocontrol
+			-u QPID agocontrol && \
+		einfo "Added agocontrol to /etc/qpid/qpidd.ssasldb"
 	)
 
 	test -e "${ROOT}"/etc/qpid/qpid.acl && (
 		grep -q agocontrol "${ROOT}"/etc/qpid/qpidd.acl || sed -i \
 			's/admin@QPID/admin@QPID agocontrol@QPID/g' \
-			"${ROOT}"/etc/qpid/qpidd.acl
-	)
-
-	test -e "${ROOT}"/var/opt/agocontrol/datalogger.db || (
-		sqlite3 -init "${ROOT}"/usr/share/${PN}/data/datalogger.sql \
-			"${ROOT}"/var/opt/agocontrol/datalogger.db .quit
+			"${ROOT}"/etc/qpid/qpidd.acl && \
+		einfo "Added agocontrol to /etc/qpid/qpidd.acl"
 	)
 }
