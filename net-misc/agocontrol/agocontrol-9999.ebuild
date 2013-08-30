@@ -20,6 +20,8 @@ IUSE="apc asterisk blinkm +cherrypy chromoflex dmx enigma2 enocean firmata
 
 DEPEND="<dev-cpp/yaml-cpp-0.5.0
 		dev-libs/jsoncpp
+		dev-libs/openssl
+		dev-python/pandas
 		dev-python/pyyaml
 		dev-python/qpid-python
 		dev-python/sqlite3dbm
