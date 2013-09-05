@@ -16,7 +16,7 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE="apc asterisk blinkm +cherrypy chromoflex dmx enigma2 enocean firmata
 	gc100 i2c irtrans jointspace jsonrpc knx kwikwai mcp3xxx mediaproxy
-	one-wire onkyo rain8net raspberry-pi zwave"
+	meloware one-wire onkyo rain8net raspberry-pi zwave"
 
 DEPEND="<dev-cpp/yaml-cpp-0.5.0
 		dev-libs/boost
@@ -105,9 +105,11 @@ src_prepare() {
 	use irtrans || rm conf/agoirtransethernet.service
 	use jointspace || rm conf/agojointspace.service
 	use jsonrpc || rm conf/agorpc.service
-	rm conf/agoknx.service
+	use knx || rm conf/agoknx.service
 	use kwikwai || rm conf/agokwikwai.service
-	rm conf/agoowfs.service
+	use meloware || sed -i '\#install gateways/agomeloware.py#d' Makefile
+	use meloware || rm conf/agomeloware.service
+	use one-wire || rm conf/agoowfs.service
 	use onkyo || rm conf/agoiscp.service
 	use rain8net || rm conf/agorain8net.service
 	use zwave || sed -i '\#install scripts/convert-zwave-uuid#d' Makefile
@@ -147,7 +149,7 @@ src_install() {
 	use jsonrpc && newinitd "${FILESDIR}"/agorpc.init agorpc
 	use knx && newinitd "${FILESDIR}"/agoknx.init agoknx
 	use kwikwai && newinitd "${FILESDIR}"/agokwikwai.init agokwikwai
-	newinitd "${FILESDIR}"/agomeloware.init agomeloware
+	use meloware && newinitd "${FILESDIR}"/agomeloware.init agomeloware
 	use one-wire && newinitd "${FILESDIR}"/agoowfs.init agoowfs
 	# newinitd "${FILESDIR}"/agoradiothermostat.init agoradiothermostat
 	use rain8net && newinitd "${FILESDIR}"/agorain8net.init agorain8net
