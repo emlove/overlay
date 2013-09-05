@@ -19,6 +19,7 @@ IUSE="apc asterisk blinkm +cherrypy chromoflex dmx enigma2 enocean firmata
 	one-wire onkyo rain8net raspberry-pi zwave"
 
 DEPEND="<dev-cpp/yaml-cpp-0.5.0
+		dev-libs/boost
 		dev-libs/jsoncpp
 		dev-libs/openssl
 		dev-python/pandas
