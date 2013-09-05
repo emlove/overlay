@@ -3,7 +3,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-command="/opt/agocontrol/bin/agoscenario.py"
+command="/opt/agocontrol/bin/agoscenario"
 command_background="yes"
 pidfile="/var/run/${SVCNAME}.pid"
 start_stop_daemon_args="--user agocontrol:agocontrol --chdir $(dirname ${command})"
