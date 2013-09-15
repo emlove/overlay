@@ -93,37 +93,36 @@ src_prepare() {
 	sed -i "s/^DIRS = .*/DIRS = ${DEVICES}/" devices/Makefile
 	use jsonrpc || sed -i '/DIRS = /{s/rpc//}' core/Makefile
 
-	use apc || rm conf/agoapc.service
-	use asterisk || rm conf/agoasterisk.service
-	use blinkm || rm conf/agoblinkm.service
-	use cherrypy || rm conf/agoadmin.service
-	use dmx || rm conf/agodmx.service
-	use enigma2 || rm conf/agoenigma2.service
-	use firmata || rm conf/agofirmata.service
-	use gc100 || rm conf/agogc100.service
-	use i2c || rm conf/agoi2c.service
-	use irtrans || rm conf/agoirtransethernet.service
-	use jointspace || rm conf/agojointspace.service
-	use jsonrpc || rm conf/agorpc.service
-	use knx || rm conf/agoknx.service
-	use kwikwai || rm conf/agokwikwai.service
+	use apc || rm conf/systemd/agoapc.service
+	use asterisk || rm conf/systemd/agoasterisk.service
+	use blinkm || rm conf/systemd/agoblinkm.service
+	use cherrypy || rm conf/systemd/agoadmin.service
+	use dmx || rm conf/systemd/agodmx.service
+	use enigma2 || rm conf/systemd/agoenigma2.service
+	use firmata || rm conf/systemd/agofirmata.service
+	use gc100 || rm conf/systemd/agogc100.service
+	use i2c || rm conf/systemd/agoi2c.service
+	use irtrans || rm conf/systemd/agoirtransethernet.service
+	use jointspace || rm conf/systemd/agojointspace.service
+	use jsonrpc || rm conf/systemd/agorpc.service
+	use knx || rm conf/systemd/agoknx.service
+	use kwikwai || rm conf/systemd/agokwikwai.service
 	use meloware || sed -i '\#install gateways/agomeloware.py#d' Makefile
-	use meloware || rm conf/agomeloware.service
-	use one-wire || rm conf/agoowfs.service
-	use onkyo || rm conf/agoiscp.service
-	use rain8net || rm conf/agorain8net.service
+	use meloware || rm conf/systemd/agomeloware.service
+	use one-wire || rm conf/systemd/agoowfs.service
+	use onkyo || rm conf/systemd/agoiscp.service
+	use rain8net || rm conf/systemd/agorain8net.service
 	use zwave || sed -i '\#install scripts/convert-zwave-uuid#d' Makefile
-	use zwave || rm conf/agozwave.service
-	use raspberry-pi || rm conf/raspiGPIO.service
-	( use raspberry-pi && use one-wire ) || rm conf/raspi1wGPIO.service
-	( use raspberry-pi && use mcp3xxx ) || rm conf/raspiMCP3xxxGPIO.service
+	use zwave || rm conf/systemd/agozwave.service
+	use raspberry-pi || rm conf/systemd/raspiGPIO.service
+	( use raspberry-pi && use one-wire ) || rm conf/systemd/raspi1wGPIO.service
+	( use raspberry-pi && use mcp3xxx ) || rm conf/systemd/raspiMCP3xxxGPIO.service
 
 	# These devices aren't installed in upstream makefile. 
 	# Ensure we don't install the service files.
-	rm conf/agoradiothermostat.service
-	rm conf/agosqueezeboxserver.service
+	rm conf/systemd/agoradiothermostat.service
+	rm conf/systemd/agosqueezeboxserver.service
 
-	sed -i '\#install conf/config.ini.tpl#d' Makefile
 	sed -i '\#install data/inventory.sql#d' Makefile
 	sed -i '\#install data/datalogger.sql#d' Makefile
 }
@@ -175,8 +174,6 @@ src_install() {
 	fowners -R agocontrol:agocontrol /var/opt/agocontrol
 	fperms -R -x /etc/opt/agocontrol
 
-	insinto /usr/share/${PN}/conf
-	doins conf/config.ini.tpl
 	insinto /usr/share/${PN}/data
 	doins data/inventory.sql
 	doins data/inventory-upgrade.sql
@@ -191,12 +188,9 @@ pkg_postinst() {
 pkg_config() {
 	PASSWD=letmein
 
-	test -e "${ROOT}"/etc/opt/agocontrol/config.ini || (
+	grep "00000000-0000-0000-000000000000" /etc/opt/agocontrol/conf.d/system.conf && (
 		UUID=$(uuidgen)
-		sed "s/<uuid>/${UUID}/" "${ROOT}"/usr/share/${PN}/conf/config.ini.tpl \
-			> "${ROOT}"/etc/opt/agocontrol/config.ini && \
-		chown agocontrol:agocontrol "${ROOT}"/etc/opt/agocontrol/config.ini && \
-		einfo "Installed /etc/opt/agocontrol/config.ini"
+		sed -i "s/00000000-0000-0000-000000000000/${UUID}/" /etc/opt/agocontrol/conf.d/system.conf
 	)
 
 	test -e "${ROOT}"/etc/opt/agocontrol/inventory.db || (
