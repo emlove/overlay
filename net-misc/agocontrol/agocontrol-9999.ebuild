@@ -188,18 +188,18 @@ pkg_postinst() {
 pkg_config() {
 	PASSWD=letmein
 
-	grep "00000000-0000-0000-000000000000" /etc/opt/agocontrol/conf.d/system.conf && (
+	grep "00000000-0000-0000-000000000000" /etc/opt/agocontrol/conf.d/system.conf > /dev/null && (
 		UUID=$(uuidgen)
 		sed -i "s/00000000-0000-0000-000000000000/${UUID}/" /etc/opt/agocontrol/conf.d/system.conf
 	)
 
-	test -e "${ROOT}"/etc/opt/agocontrol/inventory.db || (
+	test -e "${ROOT}"/etc/opt/agocontrol/db/inventory.db || (
 		sqlite3 -init "${ROOT}"/usr/share/${PN}/data/inventory.sql \
-			"${ROOT}"/etc/opt/agocontrol/inventory.db .quit && \
+			"${ROOT}"/etc/opt/agocontrol/db/inventory.db .quit && \
 		sqlite3 -init "${ROOT}"/usr/share/${PN}/data/inventory-upgrade.sql \
-			"${ROOT}"/etc/opt/agocontrol/inventory.db .quit && \
-		chown agocontrol:agocontrol "${ROOT}"/etc/opt/agocontrol/inventory.db && \
-		einfo "Installed /etc/opt/agocontrol/inventory.db"
+			"${ROOT}"/etc/opt/agocontrol/db/inventory.db .quit && \
+		chown agocontrol:agocontrol "${ROOT}"/etc/opt/agocontrol/db/inventory.db && \
+		einfo "Installed /etc/opt/agocontrol/db/inventory.db"
 	)
 
 	test -e "${ROOT}"/var/opt/agocontrol/datalogger.db || (
