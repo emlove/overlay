@@ -1,6 +1,6 @@
---- devices/zwave/agozwave.cpp	2013-08-25 12:54:23.099555468 -0400
-+++ devices/zwave/agozwave.cpp.patched	2013-08-28 22:58:09.907446938 -0400
-@@ -674,7 +674,7 @@
+--- devices/zwave/agozwave.cpp	2013-09-15 17:48:01.880432419 -0400
++++ devices/zwave/agozwave.cpp.patched	2013-09-16 20:52:27.620489406 -0400
+@@ -672,7 +672,7 @@
  	printf("connection to agocontrol established\n");
  
  	// init open zwave
