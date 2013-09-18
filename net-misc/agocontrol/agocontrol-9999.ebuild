@@ -172,7 +172,6 @@ src_install() {
 
 	fowners -R agocontrol:agocontrol /etc/opt/agocontrol
 	fowners -R agocontrol:agocontrol /var/opt/agocontrol
-	fperms -R -x /etc/opt/agocontrol
 
 	insinto /usr/share/${PN}/data
 	doins data/inventory.sql
