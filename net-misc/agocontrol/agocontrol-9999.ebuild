@@ -5,12 +5,12 @@
 EAPI=5
 PYTHON_DEPEND="2:2.7"
 
-inherit subversion python
+inherit git-2 python user
 
 DESCRIPTION="Ago control home automation suite"
 HOMEPAGE="http://www.agocontrol.com/"
 
-ESVN_REPO_URI="http://svn.agocontrol.com/svn/agocontrol"
+EGIT_REPO_URI="http://agocontrol.com/agocontrol.git"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
