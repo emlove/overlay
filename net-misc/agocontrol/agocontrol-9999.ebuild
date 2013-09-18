@@ -5,7 +5,7 @@
 EAPI=5
 PYTHON_DEPEND="2:2.7"
 
-inherit git-2 python user
+inherit git-2 python user eutils
 
 DESCRIPTION="Ago control home automation suite"
 HOMEPAGE="http://www.agocontrol.com/"
