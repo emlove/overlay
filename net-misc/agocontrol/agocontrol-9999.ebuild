@@ -169,6 +169,7 @@ src_install() {
 	use cherrypy && fperms +x /opt/agocontrol/admin/agoadmin.py
 	use cherrypy && dosym ../bin/myavahi.py /opt/agocontrol/admin/myavahi.py
 	use jsonrpc && doins -r core/rpc/html
+	use jsonrpc && fperms +x -R /opt/agocontrol/html/cgi-bin/
 
 	fowners -R agocontrol:agocontrol /etc/opt/agocontrol
 	fowners -R agocontrol:agocontrol /var/opt/agocontrol
