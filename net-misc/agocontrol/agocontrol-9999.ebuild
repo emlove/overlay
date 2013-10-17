@@ -66,7 +66,7 @@ src_prepare() {
 	use chromoflex && DEVICES+=" chromoflex"
 	use dmx && DEVICES+=" agodmx"
 	use enigma2 && DEVICES+=" enigma2"
-	use enocean && DEVICES+=" agoEnOcean"
+	use enocean && DEVICES+=" enocean3"
 	use firmata && DEVICES+=" firmata"
 	use gc100 && DEVICEs+=" gc100"
 	use i2c && DEVICES+=" i2c"
