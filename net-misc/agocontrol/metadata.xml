@@ -7,7 +7,6 @@
 		<flag name="asterisk">Asterisk PBX interface</flag>
 		<flag name="blinkm">blinkm interface driver</flag>
 		<flag name="chromoflex">chromoflex interface driver</flag>
-		<flag name="cherrypy">Web administration interface</flag>
 		<flag name="dmx">DMX interface driver</flag>
 		<flag name="enigma2">Enigma2/Dreambox interface</flag>
 		<flag name="enocean">EnOcean device interface</flag>

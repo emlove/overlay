@@ -14,9 +14,9 @@ EGIT_REPO_URI="http://agocontrol.com/agocontrol.git"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="apc asterisk blinkm +cherrypy chromoflex dmx enigma2 enocean firmata
-	gc100 i2c irtrans jointspace jsonrpc knx kwikwai mcp3xxx mediaproxy
-	meloware one-wire onkyo rain8net raspberry-pi zwave"
+IUSE="apc asterisk blinkm chromoflex dmx enigma2 enocean firmata gc100 i2c
+	irtrans jointspace +jsonrpc knx kwikwai mcp3xxx mediaproxy meloware
+	one-wire onkyo rain8net raspberry-pi zwave"
 
 DEPEND="<dev-cpp/yaml-cpp-0.5.0
 		dev-libs/boost
@@ -30,9 +30,6 @@ DEPEND="<dev-cpp/yaml-cpp-0.5.0
 		apc? ( >=dev-python/pysnmp-4.0 )
 		asterisk? ( dev-python/twisted-core dev-python/starpy )
 		blinkm? ( sys-apps/i2c-tools )
-		cherrypy? ( =dev-python/cherrypy-3* dev-python/mako
-			dev-python/simplejson net-dns/avahi[python] dev-python/dbus-python
-			dev-python/pygobject )
 		enigma2? ( net-dns/avahi[python] dev-python/pygobject
 			dev-python/dbus-python )
 		i2c? ( sys-apps/i2c-tools )
@@ -96,7 +93,6 @@ src_prepare() {
 	use apc || rm conf/systemd/agoapc.service
 	use asterisk || rm conf/systemd/agoasterisk.service
 	use blinkm || rm conf/systemd/agoblinkm.service
-	use cherrypy || rm conf/systemd/agoadmin.service
 	use dmx || rm conf/systemd/agodmx.service
 	use enigma2 || rm conf/systemd/agoenigma2.service
 	use firmata || rm conf/systemd/agofirmata.service
@@ -133,7 +129,6 @@ src_install() {
 	use apc && newinitd "${FILESDIR}"/agoapc.init agoapc
 	use asterisk && newinitd "${FILESDIR}"/agoasterisk.init agoasterisk
 	use blinkm && newinitd "${FILESDIR}"/agoblinkm.init agoblinkm
-	use cherrypy && newinitd "${FILESDIR}"/agoadmin.init agoadmin
 	use dmx && newinitd "${FILESDIR}"/agodmx.init agodmx
 	newinitd "${FILESDIR}"/agodatalogger.init agodatalogger
 	use enigma2 && newinitd "${FILESDIR}"/agoenigma2.init agoenigma2
@@ -165,9 +160,6 @@ src_install() {
 	use zwave && newinitd "${FILESDIR}"/agozwave.init agozwave
 
 	insinto /opt/agocontrol/
-	use cherrypy && doins -r admin
-	use cherrypy && fperms +x /opt/agocontrol/admin/agoadmin.py
-	use cherrypy && dosym ../bin/myavahi.py /opt/agocontrol/admin/myavahi.py
 	use jsonrpc && doins -r core/rpc/html
 	use jsonrpc && fperms +x -R /opt/agocontrol/html/cgi-bin/
 
