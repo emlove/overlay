@@ -16,7 +16,7 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE="apc asterisk blinkm chromoflex dmx enigma2 enocean firmata gc100 i2c
 	irtrans jointspace +jsonrpc knx kwikwai mcp3xxx mediaproxy meloware
-	one-wire onkyo rain8net raspberry-pi zwave"
+	one-wire onkyo rain8net raspberry-pi webcam zwave"
 
 DEPEND="<dev-cpp/yaml-cpp-0.5.0
 		dev-libs/boost
@@ -80,6 +80,7 @@ src_prepare() {
 	use one-wire && DEVICES+=" 1wire"
 	use onkyo && DEVICES+=" onkyo"
 	use rain8net && DEVICES+=" rain8net"
+	use webcam && DEVICES+=" webcam"
 	use zwave && DEVICES+=" zwave"
 	if use raspberry-pi ; then
 		DEVICES+=" raspiGPIO"
@@ -108,6 +109,7 @@ src_prepare() {
 	use one-wire || rm conf/systemd/agoowfs.service
 	use onkyo || rm conf/systemd/agoiscp.service
 	use rain8net || rm conf/systemd/agorain8net.service
+	use webcam || rm conf/systemd/agowebcam.service
 	use zwave || sed -i '\#install scripts/convert-zwave-uuid#d' Makefile
 	use zwave || rm conf/systemd/agozwave.service
 	use raspberry-pi || rm conf/systemd/raspiGPIO.service
@@ -157,6 +159,7 @@ src_install() {
 	newinitd "${FILESDIR}"/agosimulator.init agosimulator
 	# use  newinitd "${FILESDIR}"/agosqueezeboxserver.init agosqueezeboxserver
 	newinitd "${FILESDIR}"/agotimer.init agotimer
+	use webcam && newinitd "${FILESDIR}"/agowebcam.init agowebcam
 	use zwave && newinitd "${FILESDIR}"/agozwave.init agozwave
 
 	insinto /opt/agocontrol/
