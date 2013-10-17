@@ -18,7 +18,7 @@ IUSE="apc asterisk blinkm chromoflex dmx enigma2 enocean firmata gc100 i2c
 	irtrans jointspace +jsonrpc knx kwikwai mcp3xxx mediaproxy meloware
 	one-wire onkyo rain8net raspberry-pi webcam zwave"
 
-RDEPEND="<dev-cpp/yaml-cpp-0.5.0
+DEPEND="<dev-cpp/yaml-cpp-0.5.0
 		dev-libs/boost
 		dev-libs/jsoncpp
 		dev-libs/openssl
@@ -34,9 +34,7 @@ RDEPEND="<dev-cpp/yaml-cpp-0.5.0
 			dev-python/dbus-python )
 		i2c? ( sys-apps/i2c-tools )
 		zwave? ( virtual/udev dev-libs/open-zwave )"
-
-DEPEND="${RDEPEND}
-		app-misc/realpath"
+RDEPEND="${DEPEND}"
 
 pkg_setup() {
 	python_set_active_version 2
