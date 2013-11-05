@@ -52,8 +52,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}"/swig-perl-bad-destdir.patch
-
 	python_convert_shebangs -r 2 .
 }
 
