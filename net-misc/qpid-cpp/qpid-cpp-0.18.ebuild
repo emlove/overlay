@@ -32,7 +32,7 @@ COMMON_DEP="cluster? ( sys-cluster/openais
 	infiniband? ( sys-infiniband/libibverbs
 				sys-infiniband/librdmacm )
 	sys-apps/util-linux
-	dev-libs/boost"
+	<dev-libs/boost-1.50"
 
 DEPEND="sys-apps/help2man
 	test? ( dev-util/valgrind )
