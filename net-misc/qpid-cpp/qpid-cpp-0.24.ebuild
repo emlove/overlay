@@ -51,6 +51,8 @@ pkg_setup() {
 }
 
 src_prepare() {
+	epatch "${FILESDIR}"/qpid-cpp-0.24-fix-perl-install.patch
+
 	python_convert_shebangs -r 2 .
 }
 
