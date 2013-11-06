@@ -67,14 +67,15 @@ src_configure() {
 		-DPYTHON_EXECUTABLE=/usr/bin/python2
 		-DPythonLibs_FIND_VERSION=2.7
 		-DPYTHON_LIBRARIES=/usr/lib/libpython2.7.so
-		-DPYTHON_INCLUDE_PATH=/usr/include/python2.7 )
+		-DPYTHON_INCLUDE_PATH=/usr/include/python2.7
+		-DSYSCONF_INSTALL_DIR=/etc )
 	cmake-utils_src_configure
 }
 
 src_install() {
 	cmake-utils_src_install
 
-	rm "${D}"/etc/init.d/qpidd-primary
+	rm -r "${D}"/etc/rc.d
 
 	newinitd "${FILESDIR}"/${MY_D}.init ${MY_D}
 	newconfd "${FILESDIR}"/${MY_D}.conf ${MY_D}
