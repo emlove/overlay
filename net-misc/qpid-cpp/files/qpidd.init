@@ -14,7 +14,7 @@ checkconfd() {
     QPIDD_GROUP="${QPIDD_GROUP:-qpidd}"
 	PIDDIR="${PIDDIR:-/var/run/qpidd}"
 
-	CONFIGFILE="${CONFIGFILE:-/etc/qpidd.conf}"
+	CONFIGFILE="${CONFIGFILE:-/etc/qpid/qpidd.conf}"
 	if [ ! -r "${CONFIGFILE}" ]; then
 		eerror "Unable to read configuration file: ${CONFIGFILE}"
 		return 1
