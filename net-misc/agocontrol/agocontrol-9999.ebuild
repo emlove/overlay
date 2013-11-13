@@ -204,12 +204,12 @@ pkg_config() {
 		einfo "Installed /var/opt/agocontroll/datalogger.db"
 	)
 
-	sasldblistusers2 -f "${ROOT}"/etc/qpid/qpidd.sasldb | \
+	sasldblistusers2 -f "${ROOT}"/var/lib/qpidd/qpidd.sasldb | \
 	grep -q agocontrol || (
 		echo $PASSWD | \
-			saslpasswd2 -c -p -f "${ROOT}"/etc/qpid/qpidd.sasldb \
+			saslpasswd2 -c -p -f "${ROOT}"/var/lib/qpidd/qpidd.sasldb \
 			-u QPID agocontrol && \
-		einfo "Added agocontrol to /etc/qpid/qpidd.ssasldb"
+		einfo "Added agocontrol to /var/lib/qpidd/qpidd.ssasldb"
 	)
 
 	test -e "${ROOT}"/etc/qpid/qpid.acl && (
