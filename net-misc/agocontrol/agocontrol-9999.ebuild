@@ -212,10 +212,10 @@ pkg_config() {
 		einfo "Added agocontrol to /var/lib/qpidd/qpidd.ssasldb"
 	)
 
-	test -e "${ROOT}"/etc/qpid/qpid.acl && (
-		grep -q agocontrol "${ROOT}"/etc/qpid/qpidd.acl || sed -i \
+	test -e "${ROOT}"/etc/qpid/qpidd.acl && (
+		grep -q agocontrol "${ROOT}"/etc/qpid/qpiddd.acl || sed -i \
 			's/admin@QPID/admin@QPID agocontrol@QPID/g' \
-			"${ROOT}"/etc/qpid/qpidd.acl && \
+			"${ROOT}"/etc/qpid/qpiddd.acl && \
 		einfo "Added agocontrol to /etc/qpid/qpidd.acl"
 	)
 }
