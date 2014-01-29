@@ -14,7 +14,7 @@ HOMEPAGE="https://github.com/trainman419/python-cec"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64"
+KEYWORDS="~x86 ~amd64"
 IUSE=""
 
 DEPEND="dev-libs/libcec"
