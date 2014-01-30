@@ -22,6 +22,7 @@ DEPEND="<dev-cpp/yaml-cpp-0.5.0
 		dev-lang/lua
 		dev-libs/boost
 		dev-libs/jsoncpp
+		dev-libs/libhdate
 		dev-libs/openssl
 		dev-python/pandas
 		dev-python/psutil
