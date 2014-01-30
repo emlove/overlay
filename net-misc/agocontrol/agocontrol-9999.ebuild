@@ -18,7 +18,9 @@ IUSE="apc asterisk blinkm chromoflex dmx enigma2 enocean firmata gc100 i2c
 	irtrans jointspace +jsonrpc knx kwikwai mcp3xxx mediaproxy meloware
 	one-wire onkyo rain8net raspberry-pi webcam zwave"
 
-DEPEND="<dev-cpp/yaml-cpp-0.5.0
+DEPEND="app-misc/realpath
+		<dev-cpp/yaml-cpp-0.5.0
+		dev-lang/lua
 		dev-libs/boost
 		dev-libs/jsoncpp
 		dev-libs/openssl
