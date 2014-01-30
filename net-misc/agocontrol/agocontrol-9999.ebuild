@@ -19,13 +19,15 @@ IUSE="apc asterisk blinkm chromoflex dmx enigma2 enocean firmata gc100 i2c
 	one-wire onkyo rain8net raspberry-pi webcam zwave"
 
 DEPEND="<dev-cpp/yaml-cpp-0.5.0
-		~dev-libs/boost-1.49.0
+		dev-libs/boost
 		dev-libs/jsoncpp
 		dev-libs/openssl
 		dev-python/pandas
+		dev-python/psutil
 		dev-python/pyyaml
 		dev-python/qpid-python
 		dev-python/sqlite3dbm
+		net-misc/curl
 		net-misc/qpid-cpp[sasl]
 		apc? ( >=dev-python/pysnmp-4.0 )
 		asterisk? ( dev-python/twisted-core dev-python/starpy )
