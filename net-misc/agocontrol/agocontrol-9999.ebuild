@@ -20,7 +20,7 @@ IUSE="apc asterisk blinkm chromoflex dmx enigma2 enocean firmata gc100 i2c
 
 DEPEND="<dev-cpp/yaml-cpp-0.5.0
 		=dev-lang/lua-5.2*
-		dev-libs/boost
+		=dev-libs/boost-1.49.0*
 		dev-libs/jsoncpp
 		dev-libs/libhdate
 		dev-libs/openssl
