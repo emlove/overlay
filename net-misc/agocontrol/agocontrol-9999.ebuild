@@ -45,7 +45,7 @@ pkg_setup() {
 	python_pkg_setup
 
 	enewgroup agocontrol
-	enewuser agocontrol -1 -1 "/var/run/agocontrol" "agocontrol,uucp"
+	enewuser agocontrol -1 -1 "/var/run/agocontrol" "agocontrol,uucp,dialout"
 
 	if use blinkm || use i2c ; then
 		ewarn "The blinkm and i2c devices require the i2c-dev.h header"
