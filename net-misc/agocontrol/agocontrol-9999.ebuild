@@ -15,11 +15,10 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE="apc asterisk blinkm chromoflex dmx enigma2 enocean firmata gc100 i2c
-	irtrans jointspace +jsonrpc knx kwikwai mcp3xxx mediaproxy meloware
+	irtrans jointspace +jsonrpc knx kwikwai lua mcp3xxx mediaproxy meloware
 	one-wire onkyo rain8net raspberry-pi webcam zwave"
 
 DEPEND="<dev-cpp/yaml-cpp-0.5.0
-		=dev-lang/lua-5.2*
 		=dev-libs/boost-1.49.0*
 		dev-libs/jsoncpp
 		dev-libs/libhdate
@@ -37,6 +36,7 @@ DEPEND="<dev-cpp/yaml-cpp-0.5.0
 		enigma2? ( net-dns/avahi[python] dev-python/pygobject
 			dev-python/dbus-python )
 		i2c? ( sys-apps/i2c-tools )
+		lua? ( =dev-lang/lua-5.2* )
 		zwave? ( virtual/udev dev-libs/open-zwave )"
 RDEPEND="${DEPEND}"
 
@@ -93,7 +93,8 @@ src_prepare() {
 	fi
 
 	sed -i "s/^DIRS = .*/DIRS = ${DEVICES}/" devices/Makefile
-	use jsonrpc || sed -i '/DIRS = /{s/rpc//}' core/Makefile
+	use jsonrpc || sed -i '/DIRS = /s/rpc//' core/Makefile
+	use lua || sed -i '/DIRS = /s/lua//' core/Makefile
 
 	use apc || rm conf/systemd/agoapc.service
 	use asterisk || rm conf/systemd/agoasterisk.service
