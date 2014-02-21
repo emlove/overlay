@@ -6,7 +6,7 @@ EAPI=4
 
 PYTHON_DEPEND="2:2.7"
 
-inherit cmake-utils python
+inherit cmake-utils python user
 
 MY_D="qpidd"
 MY_SPN="qpid"
