@@ -6,7 +6,7 @@ EAPI=4
 
 PYTHON_DEPEND="2:2.7"
 
-inherit cmake-utils python user
+inherit cmake-utils python user db-use
 
 MY_D="qpidd"
 MY_SPN="qpid"
@@ -64,6 +64,7 @@ src_configure() {
 		$(cmake-utils_use_build infiniband RDMA)
 		$(cmake-utils_use_build ssl)
 		$(cmake-utils_use_build test TESTING)
+		-DDB_INCLUDE_DIR=$(db_includedir)
 		-DPYTHON_EXECUTABLE=/usr/bin/python2
 		-DPythonLibs_FIND_VERSION=2.7
 		-DPYTHON_LIBRARIES=/usr/lib/libpython2.7.so
