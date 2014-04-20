@@ -40,6 +40,12 @@ DEPEND="<dev-cpp/yaml-cpp-0.5.0
 		zwave? ( virtual/udev dev-libs/open-zwave )"
 RDEPEND="${DEPEND}"
 
+MAKE_ARGS='BINDIR=/usr/bin
+        CONFDIR=/etc/agocontrol
+        DATADIR=/var/agocontrol
+        LOCALSTATEDIR=/var/agocontrol
+        HTMLDIR=/usr/share/agocontrol/html'
+
 pkg_setup() {
 	python_set_active_version 2
 	python_pkg_setup
@@ -130,8 +136,12 @@ src_prepare() {
 	sed -i '\#install data/datalogger.sql#d' Makefile
 }
 
+src_compile() {
+    emake ${MAKE_ARGS}
+}
+
 src_install() {
-	emake DESTDIR="${D}" install
+	emake DESTDIR="${D}" ${MAKE_ARGS} install
 
 	use apc && newinitd "${FILESDIR}"/agoapc.init agoapc
 	use asterisk && newinitd "${FILESDIR}"/agoasterisk.init agoasterisk
@@ -167,12 +177,12 @@ src_install() {
 	use webcam && newinitd "${FILESDIR}"/agowebcam.init agowebcam
 	use zwave && newinitd "${FILESDIR}"/agozwave.init agozwave
 
-	insinto /opt/agocontrol/
+	insinto /usr/share/agocontrol/
 	use jsonrpc && doins -r core/rpc/html
-	use jsonrpc && fperms +x -R /opt/agocontrol/html/cgi-bin/
+	use jsonrpc && fperms +x -R /usr/share/agocontrol/html/cgi-bin/
 
-	fowners -R agocontrol:agocontrol /etc/opt/agocontrol
-	fowners -R agocontrol:agocontrol /var/opt/agocontrol
+	fowners -R agocontrol:agocontrol /etc/agocontrol
+	fowners -R agocontrol:agocontrol /var/agocontrol
 
 	insinto /usr/share/${PN}/data
 	doins data/inventory.sql
@@ -188,25 +198,25 @@ pkg_postinst() {
 pkg_config() {
 	PASSWD=letmein
 
-	grep "00000000-0000-0000-000000000000" /etc/opt/agocontrol/conf.d/system.conf > /dev/null && (
+	grep "00000000-0000-0000-000000000000" /etc/agocontrol/conf.d/system.conf > /dev/null && (
 		UUID=$(uuidgen)
-		sed -i "s/00000000-0000-0000-000000000000/${UUID}/" /etc/opt/agocontrol/conf.d/system.conf
+		sed -i "s/00000000-0000-0000-000000000000/${UUID}/" /etc/agocontrol/conf.d/system.conf
 	)
 
-	test -e "${ROOT}"/etc/opt/agocontrol/db/inventory.db || (
+	test -e "${ROOT}"/etc/agocontrol/db/inventory.db || (
 		sqlite3 -init "${ROOT}"/usr/share/${PN}/data/inventory.sql \
-			"${ROOT}"/etc/opt/agocontrol/db/inventory.db .quit && \
+			"${ROOT}"/etc/agocontrol/db/inventory.db .quit && \
 		sqlite3 -init "${ROOT}"/usr/share/${PN}/data/inventory-upgrade.sql \
-			"${ROOT}"/etc/opt/agocontrol/db/inventory.db .quit && \
-		chown agocontrol:agocontrol "${ROOT}"/etc/opt/agocontrol/db/inventory.db && \
-		einfo "Installed /etc/opt/agocontrol/db/inventory.db"
+			"${ROOT}"/etc/agocontrol/db/inventory.db .quit && \
+		chown agocontrol:agocontrol "${ROOT}"/etc/agocontrol/db/inventory.db && \
+		einfo "Installed /etc/agocontrol/db/inventory.db"
 	)
 
-	test -e "${ROOT}"/var/opt/agocontrol/datalogger.db || (
+	test -e "${ROOT}"/var/agocontrol/datalogger.db || (
 		sqlite3 -init "${ROOT}"/usr/share/${PN}/data/datalogger.sql \
-			"${ROOT}"/var/opt/agocontrol/datalogger.db .quit && \
-		chown agocontrol:agocontrol "${ROOT}"/var/opt/agocontrol/datalogger.db && \
-		einfo "Installed /var/opt/agocontroll/datalogger.db"
+			"${ROOT}"/var/agocontrol/datalogger.db .quit && \
+		chown agocontrol:agocontrol "${ROOT}"/var/agocontrol/datalogger.db && \
+		einfo "Installed /var/agocontroll/datalogger.db"
 	)
 
 	sasldblistusers2 -f "${ROOT}"/var/lib/qpidd/qpidd.sasldb | \
