@@ -5,12 +5,12 @@
 EAPI=5
 PYTHON_DEPEND="2:2.7"
 
-inherit git-2 python user eutils
+inherit cmake-utils git-2 python user eutils
 
 DESCRIPTION="Ago control home automation suite"
 HOMEPAGE="http://www.agocontrol.com/"
 
-EGIT_REPO_URI="http://agocontrol.com/agocontrol.git"
+EGIT_REPO_URI="http://git.agocontrol.com/agocontrol/agocontrol.git"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
@@ -40,12 +40,6 @@ DEPEND="<dev-cpp/yaml-cpp-0.5.0
 		zwave? ( virtual/udev dev-libs/open-zwave )"
 RDEPEND="${DEPEND}"
 
-MAKE_ARGS='BINDIR=/usr/bin
-        CONFDIR=/etc/agocontrol
-        DATADIR=/var/agocontrol
-        LOCALSTATEDIR=/var/agocontrol
-        HTMLDIR=/usr/share/agocontrol/html'
-
 pkg_setup() {
 	python_set_active_version 2
 	python_pkg_setup
@@ -68,80 +62,58 @@ src_prepare() {
 	epatch "${FILESDIR}/${P}-use-openzwave-share.patch"
 
 	python_convert_shebangs -r 2 .
-
-	DEVICES="syslog"
-	use apc && DEVICES+=" agoapc"
-	use asterisk && DEVICES+=" asterisk"
-	use blinkm && DEVICES+=" blinkm"
-	use chromoflex && DEVICES+=" chromoflex"
-	use dmx && DEVICES+=" agodmx"
-	use enigma2 && DEVICES+=" enigma2"
-	use enocean && DEVICES+=" enocean3"
-	use firmata && DEVICES+=" firmata"
-	use gc100 && DEVICEs+=" gc100"
-	use i2c && DEVICES+=" i2c"
-	use irtrans && DEVICES+=" irtrans_ethernet"
-	use jointspace && DEVICES+=" agojointspace"
-	# TODO: package libeibclient
-	use knx && DEVICES+=" knx"
-	use kwikwai && DEVICES+=" kwikwai"
-	use mediaproxy && DEVICES+=" mediaproxy"
-	# TODO: package python-ow
-	use one-wire && DEVICES+=" 1wire"
-	use onkyo && DEVICES+=" onkyo"
-	use rain8net && DEVICES+=" rain8net"
-	use webcam && DEVICES+=" webcam"
-	use zwave && DEVICES+=" zwave"
-	if use raspberry-pi ; then
-		DEVICES+=" raspiGPIO"
-		use mcp3xxx && DEVICES+=" raspiMCP3xxxGPIO"
-		use one-wire && DEVICES+=" raspi1wGPIO"
-	fi
-
-	sed -i "s/^DIRS = .*/DIRS = ${DEVICES}/" devices/Makefile
-	use jsonrpc || sed -i '/DIRS = /s/rpc//' core/Makefile
-	use lua || sed -i '/DIRS = /s/lua//' core/Makefile
-
-	use apc || rm conf/systemd/agoapc.service
-	use asterisk || rm conf/systemd/agoasterisk.service
-	use blinkm || rm conf/systemd/agoblinkm.service
-	use dmx || rm conf/systemd/agodmx.service
-	use enigma2 || rm conf/systemd/agoenigma2.service
-	use firmata || rm conf/systemd/agofirmata.service
-	use gc100 || rm conf/systemd/agogc100.service
-	use i2c || rm conf/systemd/agoi2c.service
-	use irtrans || rm conf/systemd/agoirtransethernet.service
-	use jointspace || rm conf/systemd/agojointspace.service
-	use jsonrpc || rm conf/systemd/agorpc.service
-	use knx || rm conf/systemd/agoknx.service
-	use kwikwai || rm conf/systemd/agokwikwai.service
-	use meloware || sed -i '\#install gateways/agomeloware.py#d' Makefile
-	use meloware || rm conf/systemd/agomeloware.service
-	use one-wire || rm conf/systemd/agoowfs.service
-	use onkyo || rm conf/systemd/agoiscp.service
-	use rain8net || rm conf/systemd/agorain8net.service
-	use webcam || rm conf/systemd/agowebcam.service
-	use zwave || sed -i '\#install scripts/convert-zwave-uuid#d' Makefile
-	use zwave || rm conf/systemd/agozwave.service
-	use raspberry-pi || rm conf/systemd/raspiGPIO.service
-	( use raspberry-pi && use one-wire ) || rm conf/systemd/raspi1wGPIO.service
-	( use raspberry-pi && use mcp3xxx ) || rm conf/systemd/raspiMCP3xxxGPIO.service
-
-	# These devices aren't installed in upstream makefile. 
-	# Ensure we don't install the service files.
-	rm conf/systemd/agoradiothermostat.service
-	rm conf/systemd/agosqueezeboxserver.service
-
-	sed -i '\#install data/inventory.sql#d' Makefile
-	sed -i '\#install data/datalogger.sql#d' Makefile
 }
 
-src_compile() {
-    emake ${MAKE_ARGS}
+src_configure() {
+	local mycmakeargs=(
+		-DBINDIR=/usr/lib/${PN}
+        -DCONFDIR=/etc/${PN}
+        -DDATADIR=/usr/share/${PN}
+        -DLOCALSTATEDIR=/var/${PN}
+        -DHTMLDIR=/usr/share/${PN}/html
+
+		$(cmake-utils_use_build jsonrpc CORE_rpc)
+		$(cmake-utils_use_build lua CORE_lua)
+
+		$(cmake-utils_use_build one-wire DEVICE_1wire)
+		-DBUILD_DEVICE_PLCBUS=OFF
+		$(cmake-utils_use_build apc DEVICE_agoapc)
+		$(cmake-utils_use_build dmx DEVICE_agodmx)
+		$(cmake-utils_use_build jointspace DEVICE_agojointspace)
+		-DBUILD_DEVICE_alert=OFF
+		$(cmake-utils_use_build asterisk DEVICE_asterisk)
+		$(cmake-utils_use_build blinkm DEVICE_blinkm)
+		$(cmake-utils_use_build chromoflex DEVICE_chromoflex)
+		$(cmake-utils_use_build enigma2 DEVICE_enigma2)
+		$(cmake-utils_use_build enocean DEVICE_enocean3)
+		$(cmake-utils_use_build firmata DEVICE_firmata)
+		$(cmake-utils_use_build gc100 DEVICE_gc100)
+		$(cmake-utils_use_build i2c DEVICE_i2c)
+		-DBUILD_DEVICE_ipx800=OFF
+		$(cmake-utils_use_build irtrans DEVICE_irtrans_ethernet)
+		$(cmake-utils_use_build knx DEVICE_knx)
+		$(cmake-utils_use_build kwikwai DEVICE_kwikwai)
+		$(cmake-utils_use_build mediaproxy DEVICE_mediaproxy)
+		$(cmake-utils_use_build onkyo DEVICE_onkyo)
+		$(cmake-utils_use_build rain8net DEVICE_rain8net)
+		$(cmake-utils_use_build raspberry-pi DEVICE_raspi1wGPIO)
+		$(cmake-utils_use_build raspberry-pi DEVICE_raspiCamera)
+		$(cmake-utils_use_build raspberry-pi DEVICE_raspiGPIO)
+		$(cmake-utils_use_build raspberry-pi DEVICE_raspiMCP3xxxGPIO)
+		-DBUILD_DEVICE_scheduler=OFF
+		-DBUILD_DEVICE_squeezebox=OFF
+		-DBUILD_DEVICE_syslog=ON
+		-DBUILD_DEVICE_temperatur.nu=OFF
+		-DBUILD_DEVICE_wake_on_lan=OFF
+		$(cmake-utils_use_build webcam DEVICE_webcam)
+		-DBUILD_DEVICE_x10=OFF
+		-DBUILD_DEVICE_zwave=OFF
+	)
+	cmake-utils_src_configure
 }
 
 src_install() {
-	emake DESTDIR="${D}" ${MAKE_ARGS} install
+	cmake-utils_src_install
 
 	use apc && newinitd "${FILESDIR}"/agoapc.init agoapc
 	use asterisk && newinitd "${FILESDIR}"/agoasterisk.init agoasterisk
@@ -177,17 +149,13 @@ src_install() {
 	use webcam && newinitd "${FILESDIR}"/agowebcam.init agowebcam
 	use zwave && newinitd "${FILESDIR}"/agozwave.init agozwave
 
-	insinto /usr/share/agocontrol/
-	use jsonrpc && doins -r core/rpc/html
-	use jsonrpc && fperms +x -R /usr/share/agocontrol/html/cgi-bin/
+	# No longer needed?
+	# insinto /usr/share/agocontrol/
+	# use jsonrpc && doins -r core/rpc/html
+	# use jsonrpc && fperms +x -R /usr/share/agocontrol/html/cgi-bin/
 
-	fowners -R agocontrol:agocontrol /etc/agocontrol
+	dodir /var/agocontrol
 	fowners -R agocontrol:agocontrol /var/agocontrol
-
-	insinto /usr/share/${PN}/data
-	doins data/inventory.sql
-	doins data/inventory-upgrade.sql
-	doins data/datalogger.sql
 }
 
 pkg_postinst() {
@@ -216,7 +184,7 @@ pkg_config() {
 		sqlite3 -init "${ROOT}"/usr/share/${PN}/data/datalogger.sql \
 			"${ROOT}"/var/agocontrol/datalogger.db .quit && \
 		chown agocontrol:agocontrol "${ROOT}"/var/agocontrol/datalogger.db && \
-		einfo "Installed /var/agocontroll/datalogger.db"
+		einfo "Installed /var/agocontrol/datalogger.db"
 	)
 
 	sasldblistusers2 -f "${ROOT}"/var/lib/qpidd/qpidd.sasldb | \
