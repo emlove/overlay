@@ -19,7 +19,7 @@ IUSE="apc asterisk blinkm chromoflex dmx enigma2 enocean firmata gc100 i2c
 	one-wire onkyo rain8net raspberry-pi webcam zwave"
 
 DEPEND="<dev-cpp/yaml-cpp-0.5.0
-		=dev-libs/boost-1.49.0*
+		dev-libs/boost
 		dev-libs/jsoncpp
 		dev-libs/libhdate
 		dev-libs/openssl
