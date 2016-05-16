@@ -1,9 +1,0 @@
-#!/sbin/runscript
-# Copyright 1999-2013 Gentoo Foundation
-# Distributed under the terms of the GNU General Public License v2
-# $Header: $
-
-command="/opt/agocontrol/bin/agoevent"
-command_background="yes"
-pidfile="/var/run/${SVCNAME}.pid"
-start_stop_daemon_args="--user agocontrol:agocontrol --chdir $(dirname ${command})"
