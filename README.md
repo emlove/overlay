@@ -3,6 +3,7 @@ armills-overlay
 
 My personal gentoo overlay
 
-To add this overlay, use the following command:
+To add this overlay, use the following commands:
 
-    # layman -o https://raw.github.com/armills/overlay/master/layman.xml -a armills
+    sudo curl https://raw.githubusercontent.com/armills/overlay/master/repo.conf -o /etc/portage/repos.conf/armills.conf
+    sudo emaint sync -r armills
