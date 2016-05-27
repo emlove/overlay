@@ -5,7 +5,7 @@
 EAPI=5
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE="sqlite"
-inherit distutils-r1 eutils
+inherit distutils-r1 eutils bash-completion-r1
 
 MY_PV=${PV/_beta/-beta.}
 MY_P=${PN}-${MY_PV}
@@ -84,6 +84,11 @@ python_test() {
 }
 
 python_install_all() {
+	distutils-r1_python_install_all
+
 	doman man/beet.1 man/beetsconfig.5
 	use doc && dohtml -r docs/_build/html/
+
+	"${D}$(python_get_scriptdir)/beet" completion > "${T}/beet.bashcomp"
+	newbashcomp "${T}/beet.bashcomp" beet
 }
