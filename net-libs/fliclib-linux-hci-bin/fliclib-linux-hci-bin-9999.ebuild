@@ -16,8 +16,7 @@ LICENSE="UNKNOWN"
 SLOT="0"
 KEYWORDS="~amd64"
 
-DEPEND="
-	sys-libs/libcap"
+DEPEND=""
 
 RDEPEND=""
 
