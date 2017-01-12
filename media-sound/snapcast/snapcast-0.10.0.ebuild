@@ -4,7 +4,7 @@
 
 EAPI=6
 
-inherit git-r3
+inherit systemd git-r3
 
 DESCRIPTION="Synchronous audio player"
 HOMEPAGE="https://github.com/badaix/snapcast"
@@ -32,11 +32,22 @@ src_compile() {
 	# Upstream makefile doesn't supply a better alternative.
 	STRIP=":"
 
-	use server && emake STRIP="${STRIP}" server
-	use client && emake STRIP="${STRIP}" client
+	for component in server client; do
+		use "${component}" || continue
+		emake STRIP="${STRIP}" "${component}"
+	done
 }
 
 src_install() {
-	use server && emake DESTDIR="${D}" installserver
-	use client && emake DESTDIR="${D}" installclient
+	for component in server client; do
+		use "${component}" || continue
+
+		emake DESTDIR="${D}" "install${component}"
+
+		newinitd "${S}/${component}/debian/snap${component}.init" "snap${component}"
+		systemd_dounit "${S}/${component}/debian/snap${component}.service"
+
+		insinto "/etc/default"
+		newins "${S}/${component}/debian/snap${component}.default" "snap${component}"
+	done
 }
