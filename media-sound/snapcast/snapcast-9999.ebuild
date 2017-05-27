@@ -46,7 +46,8 @@ src_install() {
 
 		emake DESTDIR="${D}" "install${component}"
 
-		newinitd "${S}/${component}/debian/snap${component}.init" "snap${component}"
+		newinitd "${FILESDIR}/snap${component}.initd" "snap${component}"
+		newconfd "${FILESDIR}/snap${component}.confd" "snap${component}"
 		systemd_dounit "${S}/${component}/debian/snap${component}.service"
 
 		insinto "/etc/default"
