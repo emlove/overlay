@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -25,6 +24,10 @@ DEPEND="
 	net-dns/avahi"
 
 RDEPEND="${DEPEND}"
+
+pkg_setup() {
+	enewuser snapserver -1 -1 -1 "audio"
+}
 
 src_compile() {
 	# Override the strip binary to : to prevent stripping debug symbols
