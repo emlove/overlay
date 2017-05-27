@@ -1,0 +1,28 @@
+#!/sbin/openrc-run
+# Copyright 1999-2017 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+
+: CFGFILE=${CFGFILE:=/etc/default/snapclient}
+
+depend() {
+#  (Dependency information)
+   need net
+   config ${CFGFILE}
+}
+
+start() {
+#  (Commands necessary to start the service)
+   ebegin "Starting snapclient"
+   start-stop-daemon --start --exec /usr/bin/snapclient  \
+		     --pidfile /var/run/snapclient.pid \
+		     -- ${SNAPCLIENT_OPTS}
+   eend $?
+}
+
+stop() {
+#  (Commands necessary to stop the service)
+   ebegin "Stopping snapclient"
+   start-stop-daemon --stop --exec /usr/bin/snapclient \
+		     --pidfile /var/run/snapclient.pid --quiet
+   eend $?
+}

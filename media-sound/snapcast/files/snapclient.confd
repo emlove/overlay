@@ -1,0 +1,1 @@
+SNAPCLIENT_OPTS="-d -h 192.168.1.21 -p 1704"

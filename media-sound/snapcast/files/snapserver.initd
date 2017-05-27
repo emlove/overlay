@@ -1,0 +1,28 @@
+#!/sbin/openrc-run
+# Copyright 1999-2017 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+
+: CFGFILE=${CFGFILE:=/etc/default/snapserver}
+
+depend() {
+#  (Dependency information)
+   need net
+   config ${CFGFILE}
+}
+
+start() {
+#  (Commands necessary to start the service)
+   ebegin "Starting snapserver"
+   start-stop-daemon --start --exec /usr/bin/snapserver \ \
+		     --pidfile /var/run/snapserver/pid \
+		     -- ${SNAPSERVER_OPTS}
+   eend $?
+}
+
+stop() {
+#  (Commands necessary to stop the service)
+   ebegin "Stopping snapserver"
+   start-stop-daemon --stop --exec /usr/bin/snapserver \
+		     --pidfile /var/run/snapserver/pid
+   eend $?
+}
