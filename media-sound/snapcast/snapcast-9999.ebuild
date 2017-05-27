@@ -1,5 +1,6 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
+# $id$
 
 EAPI=6
 
@@ -26,7 +27,9 @@ DEPEND="
 RDEPEND="${DEPEND}"
 
 pkg_setup() {
-	enewuser snapserver -1 -1 -1 "audio"
+	for component in server client; do
+		enewuser snap${component} -1 -1 -1 "audio"
+	done
 }
 
 src_compile() {
