@@ -14,7 +14,7 @@ start() {
 #  (Commands necessary to start the service)
    ebegin "Starting snapclient"
    start-stop-daemon --start --exec /usr/bin/snapclient  \
-		     --pidfile /var/run/snapclient.pid \
+		     --pidfile /var/run/snapclient/pid \
 		     -- ${SNAPCLIENT_OPTS}
    eend $?
 }
@@ -23,6 +23,6 @@ stop() {
 #  (Commands necessary to stop the service)
    ebegin "Stopping snapclient"
    start-stop-daemon --stop --exec /usr/bin/snapclient \
-		     --pidfile /var/run/snapclient.pid --quiet
+		     --pidfile /var/run/snapclient/pid --quiet
    eend $?
 }
