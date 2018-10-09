@@ -1,6 +1,6 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
+# $id$
 
 EAPI=6
 
@@ -26,6 +26,12 @@ DEPEND="
 
 RDEPEND="${DEPEND}"
 
+pkg_setup() {
+	for component in server client; do
+		enewuser snap${component} -1 -1 -1 "audio"
+	done
+}
+
 src_compile() {
 	# Override the strip binary to : to prevent stripping debug symbols
 	# Upstream makefile doesn't supply a better alternative.
@@ -43,7 +49,8 @@ src_install() {
 
 		emake DESTDIR="${D}" "install${component}"
 
-		newinitd "${S}/${component}/debian/snap${component}.init" "snap${component}"
+		newinitd "${FILESDIR}/snap${component}.initd" "snap${component}"
+		newconfd "${FILESDIR}/snap${component}.confd" "snap${component}"
 		systemd_dounit "${S}/${component}/debian/snap${component}.service"
 
 		insinto "/etc/default"

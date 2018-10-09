@@ -1,9 +1,1 @@
-armills-overlay
-===============
-
-My personal gentoo overlay
-
-To add this overlay, use the following commands:
-
-    sudo curl https://raw.githubusercontent.com/armills/overlay/master/repo.conf -o /etc/portage/repos.conf/armills.conf
-    sudo emaint sync -r armills
+This is a fork of [armills-overlay](https://github.com/armills/overlay) I made in order to tweak the `/etc/init.d` and `/etc/conf.d` files for the `media-sound/snapclient` ebuild.
