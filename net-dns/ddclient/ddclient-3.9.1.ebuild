@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit systemd
+inherit systemd tmpfiles
 
 DESCRIPTION="Perl client used to update dynamic DNS entries"
 HOMEPAGE="https://ddclient.net/"
@@ -47,13 +47,11 @@ src_install() {
 
 	insinto /etc/ddclient
 	insopts -m 0600 -o ddclient -g ddclient
-	diropts -m 0755 -o ddclient -g ddclient
 	newins sample-etc_ddclient.conf ddclient.conf
-	keepdir /var/cache/ddclient
 
 	newinitd "${FILESDIR}"/ddclient.initd-r6 ddclient
 	systemd_newunit "${FILESDIR}"/ddclient.service-r1 ddclient.service
-	systemd_newtmpfilesd "${FILESDIR}"/ddclient.tmpfiles ddclient.conf
+	newtmpfiles "${FILESDIR}"/ddclient.tmpfiles ddclient.conf
 
 	dodoc Change* README* RELEASENOTE TODO UPGRADE
 
@@ -61,4 +59,8 @@ src_install() {
 		docinto examples
 		dodoc sample-*
 	fi
+}
+
+pkg_postinst() {
+	tmpfiles_process ddclient.conf
 }
