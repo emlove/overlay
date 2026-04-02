@@ -15,7 +15,7 @@ KEYWORDS="~amd64"
 IUSE="mysql postgres"
 REQUIRED_USE="|| ( mysql postgres )"
 
-RDEPEND=">=dev-lang/php-8.3[bcmath,ctype,curl,exif,gd,iconv,intl,ssl,tokenizer,xml,zip,pdo,mysql?,postgres?]
+RDEPEND=">=dev-lang/php-8.3[bcmath,ctype,curl,exif,ffi,gd,iconv,intl,ssl,tokenizer,xml,zip,pdo,mysql?,postgres?]
 	media-gfx/jpegoptim
 	media-gfx/optipng
 	media-gfx/pngquant
